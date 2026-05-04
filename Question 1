@@ -1,0 +1,47 @@
+import java.util.*;
+
+public class CyclicSubstringMaxSum {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+
+        int result = maxCyclicSubstringSum(s);
+        System.out.println(result);
+
+        sc.close();
+    }
+
+    public static int maxCyclicSubstringSum(String s) {
+        int n = s.length();
+        String doubled = s + s;
+
+        boolean[] visited = new boolean[26];
+
+        int left = 0;
+        int currentSum = 0;
+        int maxSum = 0;
+
+        for (int right = 0; right < doubled.length(); right++) {
+            char ch = doubled.charAt(right);
+            int index = ch - 'a';
+            int value = index + 1;
+
+            while (visited[index] || (right - left + 1) > n) {
+                char leftChar = doubled.charAt(left);
+                int leftIndex = leftChar - 'a';
+
+                visited[leftIndex] = false;
+                currentSum -= (leftIndex + 1);
+                left++;
+            }
+
+            visited[index] = true;
+            currentSum += value;
+
+            maxSum = Math.max(maxSum, currentSum);
+        }
+
+        return maxSum;
+    }
+}
